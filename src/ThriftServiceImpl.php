@@ -6,6 +6,7 @@ use Angejia\Thrift\Contracts\ThriftService;
 use Thrift\Protocol\TProtocol;
 use Thrift\TMultiplexedProcessor;
 use Thrift\Transport\TTransport;
+use Illuminate\Contracts\Foundation\Application;
 
 class ThriftServiceImpl implements ThriftService
 {
@@ -16,9 +17,9 @@ class ThriftServiceImpl implements ThriftService
     /**
      * ThriftServiceImpl constructor.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application $app
+     * @param Application $app
      */
-    public function __construct($app)
+    public function __construct(Application $app)
     {
         $this->app = $app;
         $names = $this->app['config']["thrift.names"];
