@@ -20,6 +20,25 @@ class ThriftMiddleware
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     * @return Response
+     */
+    protected function process($request)
+    {
+        /* @var ThriftService $thrift_service */
+        $thrift_service = $this->app->make(ThriftService::class);
+
+        $transport = new TMemoryBuffer($request->getContent());
+
+        $transport->open();
+        $thrift_service->process($transport);
+        $buffer = $transport->getBuffer();
+        $transport->close();
+        return (new Response($buffer, 200))
+            ->header('Content-Type', 'application/x-thrift');
+    }
+
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
@@ -29,18 +48,7 @@ class ThriftMiddleware
     public function handle($request, Closure $next)
     {
         if ($request->is('rpc') && 'application/x-thrift' == $request->header('CONTENT_TYPE')) {
-
-            /* @var ThriftService $thrift_service */
-            $thrift_service = $this->app(ThriftService::class);
-
-            $transport = new TMemoryBuffer($request->getContent());
-
-            $transport->open();
-            $thrift_service->process($transport);
-            $buffer = $transport->getBuffer();
-            $transport->close();
-            return (new Response($buffer, 200))
-                ->header('Content-Type', 'application/x-thrift');
+            return $this->process($request);
         } else {
             return $next($request);
         }
