@@ -6,31 +6,30 @@ use Angejia\Thrift\Contracts\ThriftServer;
 use Thrift\Protocol\TProtocol;
 use Thrift\TMultiplexedProcessor;
 use Thrift\Transport\TTransport;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Config\Repository;
 
 class ThriftServerImpl implements ThriftServer
 {
-    private $app;
+    private $config;
     private $mp;
     private $protocol_class;
 
     /**
      * ThriftServiceImpl constructor.
      *
-     * @param Application $app
+     * @param Repository $config
      */
-    public function __construct(Application $app)
+    public function __construct(Repository $config)
     {
-        $this->app = $app;
-        $names = $this->app['config']["thrift.names"];
+        $this->config = $config;
+        $names = $this->config->get("thrift.names");
 
         $this->mp = new TMultiplexedProcessor();
-        $this->protocol_class = $this->app['config']["thrift.protocol"];
+        $this->protocol_class = $this->config->get("thrift.protocol");
 
         foreach ($names as $name) {
             $this->register($name);
         }
-
     }
 
     public function register($name, $handler_class = null, $processor_class = null)
