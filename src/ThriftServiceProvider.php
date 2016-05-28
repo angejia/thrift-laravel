@@ -20,7 +20,7 @@ class ThriftServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('Angejia\Thrift\Contracts\ThriftService', 'Angejia\Thrift\ThriftServiceImpl');
+        $this->app->singleton('Angejia\Thrift\Contracts\ThriftServer', 'Angejia\Thrift\ThriftServerImpl');
     }
 
     /**
@@ -30,6 +30,6 @@ class ThriftServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['Angejia\Thrift\Contracts\ThriftService'];
+        return ['Angejia\Thrift\Contracts\ThriftServer'];
     }
 }

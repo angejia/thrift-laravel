@@ -2,16 +2,16 @@
 
 namespace Angejia\Thrift\Middleware;
 
-use Angejia\Thrift\Contracts\ThriftService;
+use Angejia\Thrift\Contracts\ThriftServer;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Response;
 use Thrift\Transport\TMemoryBuffer;
 
-class ThriftMiddleware
+class ThriftServerMiddleware
 {
     /**
-     * ThriftMiddleware constructor.
+     * ThriftServerMiddleware constructor.
      * @param Application $app
      */
     public function __construct(Application $app)
@@ -25,13 +25,13 @@ class ThriftMiddleware
      */
     protected function process($request)
     {
-        /* @var ThriftService $thrift_service */
-        $thrift_service = $this->app->make(ThriftService::class);
+        /* @var ThriftServer $thrift_server */
+        $thrift_server = $this->app->make(ThriftServer::class);
 
         $transport = new TMemoryBuffer($request->getContent());
 
         $transport->open();
-        $thrift_service->process($transport);
+        $thrift_server->process($transport);
         $buffer = $transport->getBuffer();
         $transport->close();
         return (new Response($buffer, 200))

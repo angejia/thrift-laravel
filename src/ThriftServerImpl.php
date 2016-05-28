@@ -2,13 +2,13 @@
 
 namespace Angejia\Thrift;
 
-use Angejia\Thrift\Contracts\ThriftService;
+use Angejia\Thrift\Contracts\ThriftServer;
 use Thrift\Protocol\TProtocol;
 use Thrift\TMultiplexedProcessor;
 use Thrift\Transport\TTransport;
 use Illuminate\Contracts\Foundation\Application;
 
-class ThriftServiceImpl implements ThriftService
+class ThriftServerImpl implements ThriftServer
 {
     private $app;
     private $mp;
