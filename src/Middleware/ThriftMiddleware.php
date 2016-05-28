@@ -12,6 +12,7 @@ class ThriftMiddleware
 {
     /**
      * ThriftMiddleware constructor.
+     * @param Application $app
      */
     public function __construct(Application $app)
     {
@@ -29,6 +30,7 @@ class ThriftMiddleware
     {
         if ($request->is('rpc') && 'application/x-thrift' == $request->header('CONTENT_TYPE')) {
 
+            /* @var ThriftService $thrift_service */
             $thrift_service = $this->app(ThriftService::class);
 
             $transport = new TMemoryBuffer($request->getContent());
