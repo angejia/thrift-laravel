@@ -4,7 +4,7 @@ namespace Angejia\Thrift\Contracts;
 
 use Thrift\Transport\TTransport;
 
-interface ThriftService
+interface ThriftServer
 {
     public function register($name, $handler_class = null, $processor_class = null);
 
