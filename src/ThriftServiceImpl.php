@@ -50,7 +50,7 @@ class ThriftServiceImpl implements ThriftService
     public function process(TTransport $transport)
     {
         /* @var TProtocol */
-        $protocol = new $this->protocol_class();
+        $protocol = new $this->protocol_class($transport);
         if (!$transport->isOpen())
             $transport->open();
         $this->mp->process($protocol, $protocol);
