@@ -3,6 +3,7 @@
 namespace Angejia\Thrift;
 
 use Angejia\Thrift\Contracts\ThriftServer;
+use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Protocol\TProtocol;
 use Thrift\TMultiplexedProcessor;
 use Thrift\Transport\TTransport;
@@ -25,7 +26,7 @@ class ThriftServerImpl implements ThriftServer
         $names = $this->config->get("thrift.names");
 
         $this->mp = new TMultiplexedProcessor();
-        $this->protocol_class = $this->config->get("thrift.protocol");
+        $this->protocol_class = $this->config->get("thrift.protocol", TBinaryProtocolAccelerated::class);
 
         foreach ($names as $name) {
             $this->register($name);
