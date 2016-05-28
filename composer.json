@@ -1,0 +1,34 @@
+{
+  "name": "angejia/thrift-laravel",
+  "description": "thrift in laravel",
+  "keywords": [
+    "thrift",
+    "laravel"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.4.0",
+    "apache/thrift": "0.9.*",
+    "illuminate/http": "5.1.*",
+    "illuminate/support": "5.1.*"
+  },
+  "require-dev": {
+    "mockery/mockery": "~0.9",
+    "phpunit/phpunit": "~4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Angejia\\Thrift\\": "src/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  }
+}
