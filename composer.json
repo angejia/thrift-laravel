@@ -20,15 +20,5 @@
     "psr-4": {
       "Angejia\\Thrift\\": "src/"
     }
-  },
-  "config": {
-    "optimize-autoloader": true,
-    "sort-packages": true
-  },
-  "repositories": {
-    "packagist": {
-      "type": "composer",
-      "url": "https://packagist.phpcomposer.com"
-    }
   }
 }
