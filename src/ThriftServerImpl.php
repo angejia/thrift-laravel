@@ -12,7 +12,7 @@ use Illuminate\Contracts\Config\Repository;
 class ThriftServerImpl implements ThriftServer
 {
     private $config;
-    private $mp;
+    private $mprocessor;
     private $protocol_class;
 
     /**
@@ -23,13 +23,19 @@ class ThriftServerImpl implements ThriftServer
     public function __construct(Repository $config)
     {
         $this->config = $config;
-        $names = $this->config->get("thrift.names");
+        $providers = $this->config->get("thrift.providers");
 
-        $this->mp = new TMultiplexedProcessor();
+        $this->mprocessor = new TMultiplexedProcessor();
         $this->protocol_class = $this->config->get("thrift.protocol", TBinaryProtocolAccelerated::class);
 
-        foreach ($names as $name) {
-            $this->register($name);
+        foreach ($providers as $provider) {
+            if (is_string($provider)) {
+                $this->register($provider);
+            } elseif (is_array($provider)) {
+                $this->register($provider[0], $provider[1]);
+            } else {
+                throw new \InvalidArgumentException("provider must be name or array. now it's " . var_export($provider));
+            }
         }
     }
 
@@ -44,7 +50,7 @@ class ThriftServerImpl implements ThriftServer
 
         $handler = new $handler_class();
         $processor = new $processor_class($handler);
-        $this->mp->registerProcessor($name, $processor);
+        $this->mprocessor->registerProcessor($name, $processor);
     }
 
     public function process(TTransport $transport)
@@ -53,7 +59,7 @@ class ThriftServerImpl implements ThriftServer
         $protocol = new $this->protocol_class($transport);
         if (!$transport->isOpen())
             $transport->open();
-        $this->mp->process($protocol, $protocol);
+        $this->mprocessor->process($protocol, $protocol);
         return $transport;
     }
 }
