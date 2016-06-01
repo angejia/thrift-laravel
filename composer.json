@@ -8,9 +8,9 @@
   "license": "MIT",
   "require": {
     "php": ">=5.4.0",
-    "apache/thrift": "0.9.*",
     "illuminate/http": "5.1.*",
-    "illuminate/support": "5.1.*"
+    "illuminate/support": "5.1.*",
+    "angejia/thrift": "0.9.*"
   },
   "require-dev": {
     "mockery/mockery": "~0.9",
