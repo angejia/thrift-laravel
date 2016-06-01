@@ -27,7 +27,7 @@ class ThriftClientImpl implements ThriftClient
         $this->protocol_class = $this->config->get("thrift.protocol", TBinaryProtocolAccelerated::class);
         $this->transport_class = $this->config->get("thrift.transport", THttpClient::class);
 
-        $arr = $this->config->get('thrift.provider');
+        $arr = $this->config->get('thrift.depends');
         foreach ($arr as $endpoint => $name) {
             $info = parse_url($endpoint);
             $info = [
