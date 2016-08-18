@@ -5,6 +5,7 @@ namespace Angejia\Thrift\Middleware;
 use Angejia\Thrift\Contracts\ThriftServer;
 use Closure;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\IpUtils;
 use Thrift\Transport\TMemoryBuffer;
 
 class ThriftServerMiddleware
@@ -44,7 +45,11 @@ class ThriftServerMiddleware
     public function handle($request, Closure $next)
     {
         if ($request->is('rpc') && 'application/x-thrift' == $request->header('CONTENT_TYPE')) {
-            return $this->process($request);
+            if (IpUtils::checkIp($request->getClientIp(), ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'])) {
+                return $this->process($request);
+            } else {
+                return response('Unauthorized.', 401);
+            }
         } else {
             return $next($request);
         }
