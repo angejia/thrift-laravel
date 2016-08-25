@@ -33,7 +33,7 @@ class ThriftClientImpl implements ThriftClient
             if (empty($endpoint)) {
                 throw new \InvalidArgumentException(
                     'The endpoint of '
-                    . (is_array($name) ? implode($name,', ') : $name)
+                    . (is_array($name) ? implode($name, ', ') : $name)
                     . ' doesn\'t exist!'
                 );
             }

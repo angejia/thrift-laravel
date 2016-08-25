@@ -2,7 +2,6 @@
 
 namespace Angejia\Thrift\Contracts;
 
-
 interface ThriftClient
 {
     /**

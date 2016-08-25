@@ -72,10 +72,12 @@ class ThriftServerImpl implements ThriftServer
     public function register($name, $handler_class = null, $processor_class = null)
     {
         $class_name = str_replace(".", "\\", $name);
-        if ($handler_class === null)
+        if ($handler_class === null) {
             $handler_class = $class_name . "Handler";
-        if ($processor_class === null)
+        }
+        if ($processor_class === null) {
             $processor_class = $class_name . "Processor";
+        }
 
         $handler = new $handler_class();
         $processor = new $processor_class($handler);
