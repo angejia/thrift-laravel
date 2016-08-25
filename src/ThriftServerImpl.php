@@ -4,10 +4,12 @@ namespace Angejia\Thrift;
 
 use Angejia\Thrift\Contracts\ThriftServer;
 use Illuminate\Contracts\Config\Repository;
+use Thrift\Exception\TApplicationException;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Protocol\TProtocol;
 use Thrift\TMultiplexedProcessor;
 use Thrift\Transport\TTransport;
+use Thrift\Type\TMessageType;
 
 class ThriftServerImpl implements ThriftServer
 {
@@ -82,19 +84,33 @@ class ThriftServerImpl implements ThriftServer
 
     /**
      * 处理 RPC 请求
-     *
-     * @param TTransport $transport
-     * @return TTransport
+     * @param TTransport $input_trans
+     * @param TTransport $output_trans
      */
-    public function process(TTransport $transport)
+    public function process(TTransport $input_trans, TTransport $output_trans)
     {
-        $this->registerAll();
+        /* @var TProtocol $input_proto */
+        $input_proto = new $this->protocol_class($input_trans);
+        /* @var TProtocol $output_proto */
+        $output_proto = new $this->protocol_class($output_trans);
+        if (!$input_trans->isOpen()) {
+            $input_trans->open();
+        }
+        if (!$output_trans->isOpen()) {
+            $output_trans->open();
+        }
 
-        /* @var TProtocol */
-        $protocol = new $this->protocol_class($transport);
-        if (!$transport->isOpen())
-            $transport->open();
-        $this->mprocessor->process($protocol, $protocol);
-        return $transport;
+        try {
+            $this->registerAll();
+
+            $this->mprocessor->process($input_proto, $output_proto);
+        } catch (\Exception $e) {
+            $app_exception = new TApplicationException($e->getMessage(), TApplicationException::UNKNOWN);
+            $output_proto->writeMessageBegin(__METHOD__, TMessageType::EXCEPTION, 0);
+            $app_exception->write($output_proto);
+            $output_proto->writeMessageEnd();
+            $output_proto->getTransport()->flush();
+            \Log::error($e);
+        }
     }
 }

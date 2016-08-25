@@ -24,12 +24,13 @@ class ThriftServerMiddleware
      */
     protected function process($request)
     {
-        $transport = new TMemoryBuffer($request->getContent());
+        $input_trans = new TMemoryBuffer($request->getContent());
+        $output_trans = new TMemoryBuffer();
 
-        $transport->open();
-        $this->thrift_server->process($transport);
-        $buffer = $transport->getBuffer();
-        $transport->close();
+        $input_trans->open();
+        $this->thrift_server->process($input_trans, $output_trans);
+        $buffer = $output_trans->getBuffer();
+        $output_trans->close();
         return (new Response($buffer, 200))
             ->header('Content-Type', 'application/x-thrift');
     }
