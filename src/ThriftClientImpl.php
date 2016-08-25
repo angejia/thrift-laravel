@@ -6,6 +6,7 @@ use Angejia\Thrift\Contracts\ThriftClient;
 use Illuminate\Contracts\Config\Repository;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Protocol\TMultiplexedProtocol;
+use Thrift\Protocol\TProtocol;
 use Thrift\Transport\THttpClient;
 
 class ThriftClientImpl implements ThriftClient
@@ -29,6 +30,13 @@ class ThriftClientImpl implements ThriftClient
 
         $arr = $this->config->get('thrift.depends');
         foreach ($arr as $endpoint => $name) {
+            if (empty($endpoint)) {
+                throw new \InvalidArgumentException(
+                    'The endpoint of '
+                    . (is_array($name) ? implode($name,', ') : $name)
+                    . ' doesn\'t exist!'
+                );
+            }
             $info = parse_url($endpoint);
             $info = [
                 'host' => $info['host'],
@@ -42,6 +50,7 @@ class ThriftClientImpl implements ThriftClient
                 $this->providers[$name] = $info;
             } elseif (is_array($name)) {
                 foreach ($name as $name_) {
+                    /** @var string $name_ */
                     $this->providers[$name_] = $info;
                 }
             }
@@ -57,6 +66,7 @@ class ThriftClientImpl implements ThriftClient
         $info = $this->providers[$name];
         $transport = new $this->transport_class($info['host'], $info['port'], $info['uri'], $info['scheme']);
 
+        /** @var TProtocol $protocol */
         $protocol = new $this->protocol_class($transport);
         $protocol = new TMultiplexedProtocol($protocol, $name);
 
