@@ -107,7 +107,10 @@ class ThriftServerImpl implements ThriftServer
 
             $this->mprocessor->process($input_proto, $output_proto);
         } catch (\Exception $e) {
-            $app_exception = new TApplicationException($e->getMessage(), TApplicationException::UNKNOWN);
+            $app_exception = new TApplicationException(
+                $e->getMessage() . PHP_EOL . $e->getFile() . ':' . $e->getLine(),
+                TApplicationException::UNKNOWN
+            );
             $output_proto->writeMessageBegin(__METHOD__, TMessageType::EXCEPTION, 0);
             $app_exception->write($output_proto);
             $output_proto->writeMessageEnd();
