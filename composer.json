@@ -1,6 +1,6 @@
 {
     "name": "angejia/thrift-laravel",
-    "description": "thrift in laravel",
+    "description": "use Thrift in Laravel",
     "keywords": [
         "thrift",
         "laravel"
