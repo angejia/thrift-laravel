@@ -7,7 +7,7 @@ use Illuminate\Contracts\Config\Repository;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Protocol\TMultiplexedProtocol;
 use Thrift\Protocol\TProtocol;
-use Thrift\Transport\THttpClient;
+use Thrift\Transport\TCurlClient;
 
 class ThriftClientImpl implements ThriftClient
 {
@@ -26,7 +26,7 @@ class ThriftClientImpl implements ThriftClient
         $this->config = $config;
 
         $this->protocol_class = $this->config->get("thrift.protocol", TBinaryProtocolAccelerated::class);
-        $this->transport_class = $this->config->get("thrift.transport", THttpClient::class);
+        $this->transport_class = $this->config->get("thrift.transport", TCurlClient::class);
 
         $arr = $this->config->get('thrift.depends');
         foreach ($arr as $endpoint => $name) {
