@@ -11,7 +11,7 @@
         "illuminate/http": "5.1.*",
         "illuminate/support": "5.1.*",
         "symfony/http-foundation": "2.7.*",
-        "angejia/thrift": "^0.9.3.3"
+        "angejia/thrift": "^0.9.3.4"
     },
     "require-dev": {
         "mockery/mockery": "~0.9",
