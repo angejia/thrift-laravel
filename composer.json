@@ -8,9 +8,9 @@
     "license": "MIT",
     "require": {
         "php": ">=7.0.0",
-        "illuminate/http": "5.1.*",
-        "illuminate/support": "5.1.*",
-        "symfony/http-foundation": "2.7.*",
+        "illuminate/http": "5.1.*|5.2.*",
+        "illuminate/support": "5.1.*|5.2.*",
+        "symfony/http-foundation": "2.7.*|2.8.*|3.0.*",
         "angejia/thrift": "^0.9.3.4"
     },
     "require-dev": {
